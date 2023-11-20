@@ -78,7 +78,7 @@ const Client: React.FC = () => {
           //TODO: error handler
         });
     }
-  }, [updatedClient && Object.keys(updatedClient).length !== 0]);
+  }, [updatedClient]);
 
   React.useEffect(() => {
     if (newClient.length !== 0) {
@@ -146,7 +146,7 @@ const Client: React.FC = () => {
       >
         New client
       </Button>
-      <SearchComponent handleInputChange={handleInputChange} />
+      <SearchComponent handleInputChange={handleInputChange} labelMessage={'Client name:'} />
       <TableComponent
         headers={clientTableHeader}
         data={allClients.data}
@@ -155,6 +155,7 @@ const Client: React.FC = () => {
         handlePageChange={handlePageChange}
         handlePageSizeChange={handlePageSizeChange}
         onEditRowClick={onEditRowClick}
+        setDeleteRowId={() => {}} //TODO: implement delete method after BE team api update
       />
       {showEditModal && (
         <EditTableComponent

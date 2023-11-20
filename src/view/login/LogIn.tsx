@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../../firebase';
 import { Form, Container, Button, Alert } from 'react-bootstrap';
 
 const LogIn: React.FC = () => {
@@ -31,45 +31,6 @@ const LogIn: React.FC = () => {
   };
 
   return (
-    // <main>
-    //   <section>
-    //     <div>
-    //       <div>
-    //         <h1> Log in </h1>
-    //         <form>
-    //           <div>
-    //             <label htmlFor="email-address">Email address</label>
-    //             <input
-    //               type="email"
-    //               // label="Email address"
-    //               value={email}
-    //               onChange={e => setEmail(e.target.value)}
-    //               required
-    //               placeholder="Email address"
-    //             />
-    //           </div>
-
-    //           <div>
-    //             <label htmlFor="password">Password</label>
-    //             <input
-    //               type="password"
-    //               //  label="Create password"
-    //               value={password}
-    //               onChange={e => setPassword(e.target.value)}
-    //               required
-    //               placeholder="Password"
-    //             />
-    //           </div>
-
-    //           <button type="submit" onClick={onSubmit}>
-    //             Sign up
-    //           </button>
-    //         </form>
-    //       </div>
-    //     </div>
-    //   </section>
-    // </main>
-
     <Container className="d-flex justify-content-center align-items-center vh-100">
       <div className="login-form p-4">
         <h2 className="text-center mb-4">Login</h2>

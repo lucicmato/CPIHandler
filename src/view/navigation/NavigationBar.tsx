@@ -3,7 +3,7 @@ import React from 'react';
 import { signOut } from 'firebase/auth';
 import { Button, Nav, Navbar } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
+import { auth } from '../../firebase';
 
 const NavigationBar: React.FC = () => {
   const navigator = useNavigate();
@@ -28,13 +28,21 @@ const NavigationBar: React.FC = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/" className={`nav-link${location.pathname === '/' ? ' active' : ''}`}>
               Client
             </Nav.Link>
-            <Nav.Link as={Link} to="/product">
+            <Nav.Link
+              as={Link}
+              to="/product"
+              className={`nav-link${location.pathname === '/product' ? ' active' : ''}`}
+            >
               Product
             </Nav.Link>
-            <Nav.Link as={Link} to="/invoices">
+            <Nav.Link
+              as={Link}
+              to="/invoices"
+              className={`nav-link${location.pathname === '/invoices' ? ' active' : ''}`}
+            >
               Invoices
             </Nav.Link>
           </Nav>
@@ -42,9 +50,6 @@ const NavigationBar: React.FC = () => {
             Logout
           </Button>
         </Navbar.Collapse>
-        {/* <Navbar.Text>
-          Signed in as: <a href="#login">DODAJ</a>
-        </Navbar.Text> */}
       </Navbar>
     </div>
   );

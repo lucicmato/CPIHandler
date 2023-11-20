@@ -1,4 +1,4 @@
-import NavigationBar from './view/NavigationBar';
+import NavigationBar from './view/navigation/NavigationBar';
 import { Outlet } from 'react-router-dom';
 
 import './App.css';

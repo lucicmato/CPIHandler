@@ -7,9 +7,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import ErrorPage from './routing/ErrorPage';
 import Client from './view/client/Client';
-import Product from './view/Product';
-import Invoices from './view/Invoices';
-import LogIn from './view/LogIn';
+import Product from './view/product/Product';
+import Invoices from './view/invoices/Invoices';
+import LogIn from './view/login/LogIn';
 
 import './index.css';
 

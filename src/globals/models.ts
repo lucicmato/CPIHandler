@@ -1,4 +1,4 @@
-import { UserRole, UserStatus } from './enums';
+import { PayStatus, PaymentMethod, UserRole, UserStatus } from './enums';
 
 export interface ClientTableModel {
   data:
@@ -39,8 +39,64 @@ export interface ClientTableModel {
     | undefined;
   info: string[];
 }
+export interface ProductTableModel {
+  data:
+    | [
+        {
+          archive: boolean;
+          createdAt: string;
+          deletedAt: string;
+          description: string;
+          id: string;
+          name: string;
+          price: number;
+          productType: string;
+          sku: string;
+          storageDTO: string;
+          unit: string;
+          updatedAt: string;
+        },
+      ]
+    | undefined;
+  info: string[];
+}
 
-export interface ClientTableHeader {
+export interface InvoicesByUserTableModel {
+  data:
+    | [
+        {
+          arrivalDate: string;
+          clientId: string;
+          createdAt: string;
+          deletedAt: string;
+          designation: string;
+          id: string;
+          invoiceItems: InvoicesItem[];
+          issueDate: string;
+          note: string;
+          paymentDate: string;
+          paymentMethod: PaymentMethod;
+          status: PayStatus;
+          updatedAt: string;
+        },
+      ]
+    | undefined;
+  info: string[];
+}
+
+interface InvoicesItem {
+  createdAt: string;
+  deletedAt: string;
+  id: string;
+  price: number;
+  productId: string;
+  productName: string;
+  quantity: number;
+  tax: number;
+  updatedAt: string;
+}
+
+export interface TableHeader {
   header: string;
   accessor: string;
   required: boolean;

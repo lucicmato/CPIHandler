@@ -1,14 +1,17 @@
 import React from 'react';
 
 import { Button, Form, Modal } from 'react-bootstrap';
-import { ClientTableHeader } from '../../../globals/models';
+import { TableHeader } from '../../../globals/models';
+
+import styles from './NewTableComponent.module.scss';
 
 interface EditTableComponentProps {
   showModal: boolean;
-  formData: ClientTableHeader[];
+  formData: TableHeader[];
   handleNewModal: () => void;
   handleNew: (data: { [key: string]: any }[]) => void;
 }
+
 const NewTableComponent: React.FC<EditTableComponentProps> = ({ showModal, handleNewModal, handleNew, formData }) => {
   const [newData, setNewData] = React.useState<{ [key: string]: any }[]>([]);
 
@@ -33,7 +36,7 @@ const NewTableComponent: React.FC<EditTableComponentProps> = ({ showModal, handl
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            {formData.map((data: ClientTableHeader, index: number) => (
+            {formData.map((data: TableHeader, index: number) => (
               <Form.Group controlId="data1" key={index}>
                 <Form.Label>
                   {data.header}
@@ -51,12 +54,14 @@ const NewTableComponent: React.FC<EditTableComponentProps> = ({ showModal, handl
               </Form.Group>
             ))}
 
-            <Button variant="primary" type="submit">
-              New
-            </Button>
-            <Button variant="primary" type="submit" onClick={handleNewModal}>
-              Cancel
-            </Button>
+            <div className={styles.buttons}>
+              <Button variant="primary" type="submit">
+                New
+              </Button>
+              <Button variant="primary" type="submit" onClick={handleNewModal}>
+                Cancel
+              </Button>
+            </div>
           </Form>
         </Modal.Body>
       </Modal>

@@ -1,6 +1,6 @@
-import { ClientTableHeader } from '../../globals/models';
+import { TableHeader } from '../../globals/models';
 
-export const clientTableHeader: ClientTableHeader[] = [
+export const clientTableHeader: TableHeader[] = [
   //TODO: Check if id is hidden for this example
   //{ header: 'Id', accessor: 'id', required: false },
   { header: 'Address', accessor: 'address', required: true },
@@ -36,4 +36,36 @@ export const clientTableHeader: ClientTableHeader[] = [
   { header: 'Web Shop Callback', accessor: 'webShopCallback', required: false },
   { header: 'Work Email', accessor: 'workEmail', required: true },
   { header: 'Zip Code', accessor: 'zipCode', required: true },
+];
+
+export const productTableHeader: TableHeader[] = [
+  { header: 'Name', accessor: 'name', required: true },
+  { header: 'SKU', accessor: 'sku', required: true },
+  { header: 'Created At', accessor: 'createdAt', required: false },
+  { header: 'Deleted At', accessor: 'deletedAt', required: false },
+  { header: 'Address', accessor: 'address', required: false },
+  { header: 'Description', accessor: 'description', required: false },
+  { header: 'Price', accessor: 'price', required: false },
+  { header: 'productType', accessor: 'productType', required: false },
+  { header: 'Storage Locations', accessor: 'storageLocations', required: false },
+  { header: 'StorageDTO', accessor: 'storageDTO.product', required: false },
+  { header: 'Updated At', accessor: 'updatedAt', required: false },
+  { header: 'User', accessor: 'user.firstName', required: false },
+];
+
+export const invoicesTableHeader: TableHeader[] = [
+  { header: 'Status', accessor: 'status', required: true },
+  { header: 'Payment Method', accessor: 'paymentMethod', required: true },
+  { header: 'Arrival Date', accessor: 'arrivalDate', required: false },
+  { header: 'Client Id', accessor: 'clientId', required: false },
+  { header: 'Created At', accessor: 'createdAt', required: false },
+  { header: 'Deleted At', accessor: 'deletedAt', required: false },
+  { header: 'Designation', accessor: 'designation', required: false },
+  { header: 'Id', accessor: 'id', required: false },
+  { header: 'Invoice Items ', accessor: 'invoiceItems.productName', required: false },
+  { header: 'Issue Date', accessor: 'issueDate', required: false },
+  { header: 'Note', accessor: 'note', required: false },
+  { header: 'Payment Date', accessor: 'paymentDate', required: false },
+  { header: 'Payment Method', accessor: 'paymentMethod', required: false },
+  { header: 'Updated At', accessor: 'updatedAt', required: false },
 ];

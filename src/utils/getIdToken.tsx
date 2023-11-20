@@ -21,7 +21,7 @@ export const getIdToken = (): Promise<string> => {
       } else {
         unsubscribe(); // Unsubscribe if no user is found
         resolve('');
-        //TODO: Navigiraj se u /login
+        //TODO: Navigate to login page
       }
     });
   });

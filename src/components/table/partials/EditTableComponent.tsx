@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Form, Button, Modal } from 'react-bootstrap';
 
+import styles from './EditTableComponent.module.scss';
+
 interface EditTableComponentProps {
   showModal: boolean;
   formData: { [key: string]: any };
@@ -32,7 +34,7 @@ const EditTableComponent: React.FC<EditTableComponentProps> = ({
   return (
     <Modal show={showModal} onHide={handleEditModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Update Client</Modal.Title>
+        <Modal.Title>Update</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
@@ -56,12 +58,14 @@ const EditTableComponent: React.FC<EditTableComponentProps> = ({
             );
           })}
 
-          <Button variant="primary" type="submit">
-            Update
-          </Button>
-          <Button variant="primary" type="submit" onClick={handleEditModal}>
-            Cancel
-          </Button>
+          <div className={styles.buttons}>
+            <Button variant="primary" type="submit">
+              Update
+            </Button>
+            <Button variant="primary" type="submit" onClick={handleEditModal}>
+              Cancel
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
     </Modal>

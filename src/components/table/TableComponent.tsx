@@ -2,7 +2,7 @@ import React from 'react';
 import NoDataWarning from '../alerts/NoDataWarning';
 
 import { Button, Form, Spinner, Table } from 'react-bootstrap';
-import { UsersAllFiltered } from '../../services/models';
+import { ProductAllFiltered, UsersAllFiltered } from '../../services/models';
 
 import styles from './TableComponent.module.scss';
 
@@ -22,10 +22,11 @@ interface TableProps {
   headers: { header: string; accessor: string }[];
   data: { [key: string]: any }[] | undefined;
   info: string[];
-  userFilterInput: UsersAllFiltered;
-  handlePageChange: (page: number) => void;
-  handlePageSizeChange: (pageSize: string) => void;
+  userFilterInput?: UsersAllFiltered | ProductAllFiltered;
+  handlePageChange?: (page: number) => void;
+  handlePageSizeChange?: (pageSize: string) => void;
   onEditRowClick: (data: { [key: string]: any }) => void;
+  setDeleteRowId: (id: string) => void;
 }
 
 const TableComponent: React.FC<TableProps> = ({
@@ -36,6 +37,7 @@ const TableComponent: React.FC<TableProps> = ({
   handlePageChange, //finish pagination
   handlePageSizeChange,
   onEditRowClick,
+  setDeleteRowId,
 }) => {
   const [editSelectedRow, setEditSelectedRow] = React.useState<{ [key: string]: any }>({});
 
@@ -45,7 +47,7 @@ const TableComponent: React.FC<TableProps> = ({
 
   // Pagination calculation
   const getNumberOfPages = () => {
-    if (data) {
+    if (data && userFilterInput !== undefined) {
       return Math.ceil(
         data && data.length / userFilterInput.pageSize !== Infinity ? data.length / userFilterInput.pageSize : 0,
       );
@@ -59,6 +61,10 @@ const TableComponent: React.FC<TableProps> = ({
     setEditSelectedRow(rowData);
     return;
   };
+
+  function handleDeleteAction(rowData: { [key: string]: any }) {
+    setDeleteRowId(rowData.id);
+  }
 
   //TODO: Refactor - Majbe a better (easier) way is to change ternary operator to if-else
   return (
@@ -92,6 +98,7 @@ const TableComponent: React.FC<TableProps> = ({
                   <Button
                     variant="primary"
                     onClick={() => {
+                      handleDeleteAction(rowData);
                       //TODO: Check with BE teamFor clients BE method missing!
                       window.alert('deleted.');
                     }}
@@ -128,17 +135,19 @@ const TableComponent: React.FC<TableProps> = ({
             </Pagination.Item>
           ))}
         </Pagination> */}
-        <Form.Select
-          className={styles.pageNumber}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-            handlePageSizeChange(e.target.value);
-          }}
-        >
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </Form.Select>
+        {handlePageSizeChange !== undefined && (
+          <Form.Select
+            className={styles.pageNumber}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              handlePageSizeChange(e.target.value);
+            }}
+          >
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </Form.Select>
+        )}
       </div>
     </>
   );

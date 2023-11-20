@@ -63,12 +63,3 @@ export default class ClientService {
   };
 }
 
-// get all Invoices
-// try {
-//     const data = await axios.get('https://api.boxlog.lumenspei.digital/v1/invoices', {
-//       headers: getHeader(await prepareHeader()),
-//     });
-//     console.log('data', data);
-//   } catch (error) {
-//     return Promise.reject(error);
-//   }
