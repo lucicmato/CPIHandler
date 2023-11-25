@@ -1,7 +1,7 @@
 import React from 'react';
 import NoDataWarning from '../alerts/NoDataWarning';
 
-import { Button, Form, Spinner, Table } from 'react-bootstrap';
+import { Button, Form, Pagination, Table } from 'react-bootstrap';
 import { ProductAllFiltered, UsersAllFiltered } from '../../services/models';
 
 import styles from './TableComponent.module.scss';
@@ -23,10 +23,11 @@ interface TableProps {
   data: { [key: string]: any }[] | undefined;
   info: string[];
   userFilterInput?: UsersAllFiltered | ProductAllFiltered;
-  handlePageChange?: (page: number) => void;
+  numberOfPages?: number;
+  handlePageChange: (page: number) => void;
   handlePageSizeChange?: (pageSize: string) => void;
-  onEditRowClick: (data: { [key: string]: any }) => void;
-  setDeleteRowId: (id: string) => void;
+  setDeleteRowId?: (id: string) => void;
+  handleEditSelectedRow: (rowData: { [key: string]: any }) => void;
 }
 
 const TableComponent: React.FC<TableProps> = ({
@@ -34,42 +35,19 @@ const TableComponent: React.FC<TableProps> = ({
   data,
   userFilterInput,
   info,
-  handlePageChange, //finish pagination
+  numberOfPages,
+  handlePageChange,
   handlePageSizeChange,
-  onEditRowClick,
   setDeleteRowId,
+  handleEditSelectedRow,
 }) => {
-  const [editSelectedRow, setEditSelectedRow] = React.useState<{ [key: string]: any }>({});
-
-  React.useEffect(() => {
-    onEditRowClick(editSelectedRow);
-  }, [editSelectedRow]);
-
-  // Pagination calculation
-  const getNumberOfPages = () => {
-    if (data && userFilterInput !== undefined) {
-      return Math.ceil(
-        data && data.length / userFilterInput.pageSize !== Infinity ? data.length / userFilterInput.pageSize : 0,
-      );
-    }
-    return 0;
-  };
-
-  const handleEditSelectedRow = (rowData: {
-    [key: string]: any;
-  }): React.MouseEventHandler<HTMLButtonElement> | undefined => {
-    setEditSelectedRow(rowData);
-    return;
-  };
-
   function handleDeleteAction(rowData: { [key: string]: any }) {
-    setDeleteRowId(rowData.id);
+    setDeleteRowId && setDeleteRowId(rowData.id);
   }
 
-  //TODO: Refactor - Majbe a better (easier) way is to change ternary operator to if-else
-  return (
-    <>
-      {data && data.length !== 0 ? (
+  const renderTable = () => {
+    if (data && data.length !== 0) {
+      return (
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -110,31 +88,39 @@ const TableComponent: React.FC<TableProps> = ({
             ))}
           </tbody>
         </Table>
-      ) : info.length === 0 ? (
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      ) : (
+      );
+    } else if (info.length !== 0) {
+      return (
         <div>
           {info.map((message, index) => (
             <NoDataWarning key={index} message={message ?? 'No data'} />
           ))}
         </div>
-      )}
+      );
+    } else {
+      return (
+        <div>
+          <NoDataWarning message={'No data'} />
+        </div>
+      );
+    }
+  };
 
+  //TODO: Fix beckend side. Problems with numberOfPages.
+  const renderPagination = () => {
+    return (
       <div className={styles.paginationContainer}>
-        {/* //TODO: finish Pagination */}
-        {/* <Pagination>
-          {Array.from({ length: getNumberOfPages() }).map((_, index) => (
+        <Pagination>
+          {Array.from({ length: numberOfPages || 0 }).map((_, index) => (
             <Pagination.Item
               key={index + 1}
-              active={userFilterInput.pageNumber === index + 1}
+              active={userFilterInput && userFilterInput.pageNumber === index + 1}
               onClick={() => handlePageChange(index + 1)}
             >
               {index + 1}
             </Pagination.Item>
           ))}
-        </Pagination> */}
+        </Pagination>
         {handlePageSizeChange !== undefined && (
           <Form.Select
             className={styles.pageNumber}
@@ -149,6 +135,12 @@ const TableComponent: React.FC<TableProps> = ({
           </Form.Select>
         )}
       </div>
+    );
+  };
+  return (
+    <>
+      {renderTable()}
+      {renderPagination()}
     </>
   );
 };

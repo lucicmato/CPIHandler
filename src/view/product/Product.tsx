@@ -6,16 +6,25 @@ import SearchComponent from '../../components/search/SearchComponent';
 
 import { ClientTableModel, ProductTableModel } from '../../globals/models';
 import { productTableHeader } from '../../components/table/TableHeaders';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Button, FormSelect } from 'react-bootstrap';
 import { ProductAllFiltered } from '../../services/models';
 
 import styles from './Product.module.scss';
 import EditTableComponent from '../../components/table/partials/EditTableComponent';
 import NewTableComponent from '../../components/table/partials/NewTableCompnent';
+import NoDataWarning from '../../components/alerts/NoDataWarning';
 
 const Product: React.FC = () => {
-  const [allClients, setAllClients] = React.useState<ClientTableModel>({ data: undefined, info: [] });
-  const [products, setProducts] = React.useState<ProductTableModel>({ data: undefined, info: [] });
+  const [allClients, setAllClients] = React.useState<ClientTableModel>({
+    data: undefined,
+    info: [],
+    totalPages: 0,
+  });
+  const [products, setProducts] = React.useState<ProductTableModel>({
+    data: undefined,
+    info: [],
+    totalPages: 0,
+  });
   const [userFilterInput, setUserFilterInput] = React.useState<ProductAllFiltered>({
     clientId: '',
     name: '',
@@ -36,10 +45,9 @@ const Product: React.FC = () => {
     ClientService.getallClients()
       .then(res => {
         if (res.info && res.info.length !== 0) {
-          setAllClients({ data: undefined, info: res.info });
-          return;
+          setAllClients({ ...allClients, data: undefined, info: res.info });
         } else {
-          return setAllClients({ info: [], data: res.data.content });
+          setAllClients({ ...allClients, info: [], data: res.data.content });
         }
       })
       .catch(error => {
@@ -53,10 +61,18 @@ const Product: React.FC = () => {
       ProductService.getallProductFiltered(userFilterInput)
         .then(res => {
           if (res.info && res.info.length !== 0) {
-            setProducts({ data: undefined, info: res.info });
-            return;
+            setProducts({
+              ...products,
+              data: undefined,
+              info: res.info,
+            });
           }
-          setProducts({ info: [], data: res.data.content });
+          setProducts({
+            ...products,
+            info: [],
+            data: res.data.content,
+            totalPages: res.data.totalPages,
+          });
         })
         .catch(error => {
           console.error('error:', error);
@@ -64,7 +80,7 @@ const Product: React.FC = () => {
         });
     }
   }, [userFilterInput, reloadMainTable !== false]);
-
+  console.log('p', products);
   React.useEffect(() => {
     if (Object.keys(updatedProduct).length !== 0) {
       ProductService.updateTableRow(updatedProduct)
@@ -134,8 +150,8 @@ const Product: React.FC = () => {
     }
   }, [deleteRowId]);
 
-  const onClientSelect = (eventKey: any) => {
-    setUserFilterInput({ ...userFilterInput, clientId: eventKey });
+  const onClientSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUserFilterInput({ ...userFilterInput, clientId: e.target.value });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +171,7 @@ const Product: React.FC = () => {
     setShowEditModal(prevVal => !prevVal);
   };
 
-  const onEditRowClick = (data: { [key: string]: any }) => {
+  const handleEditSelectedRow = (data: { [key: string]: any }) => {
     setProduct(data);
     handleEditModal();
   };
@@ -172,6 +188,30 @@ const Product: React.FC = () => {
     setNewClient(data);
   };
 
+  const renderClientChoose = () => {
+    return (
+      <div>
+        <FormSelect
+          aria-label="Default select example"
+          onChange={e => {
+            onClientSelect(e);
+          }}
+        >
+          <option>Choose client...</option>
+          {allClients.data?.map(client => (
+            <option key={client.id} value={client.id}>
+              {client.firstName + ' ' + client.lastName}
+            </option>
+          ))}
+        </FormSelect>
+      </div>
+    );
+  };
+
+  if (userFilterInput.clientId === '') {
+    return <div className={styles.container}>{renderClientChoose()}</div>;
+  }
+
   return (
     <div className={styles.container}>
       <Button
@@ -183,30 +223,18 @@ const Product: React.FC = () => {
       >
         New product
       </Button>
-      <div>
-        <Dropdown onSelect={onClientSelect}>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            {'Choose Client'}
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-            {allClients.data?.map(client => (
-              <Dropdown.Item key={client.firstName} eventKey={client.id} onSelect={onClientSelect}>
-                {client.firstName + ' ' + client.lastName}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+      {renderClientChoose()}
+      {userFilterInput.clientId === '' && <NoDataWarning message={'Choose client'} />}
       <SearchComponent handleInputChange={handleInputChange} labelMessage={'Product name:'} />
       <TableComponent
         headers={productTableHeader}
         data={products.data}
         info={products.info}
+        numberOfPages={products.totalPages}
         userFilterInput={userFilterInput}
         handlePageChange={handlePageChange}
         handlePageSizeChange={handlePageSizeChange}
-        onEditRowClick={onEditRowClick}
+        handleEditSelectedRow={handleEditSelectedRow}
         setDeleteRowId={setDeleteRowId}
       />
       {showEditModal && (

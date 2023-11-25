@@ -14,7 +14,11 @@ import { UserRole } from '../../globals/enums';
 import styles from './Client.module.scss';
 
 const Client: React.FC = () => {
-  const [allClients, setAllClients] = React.useState<ClientTableModel>({ data: undefined, info: [] });
+  const [allClients, setAllClients] = React.useState<ClientTableModel>({
+    data: undefined,
+    info: [],
+    totalPages: 0,
+  });
   const [client, setClient] = React.useState<{ [key: string]: any }>({});
   const [updatedClient, setUpdatedClient] = React.useState<{ [key: string]: any }>({});
   const [userFilterInput, setUserFilterInput] = React.useState<UsersAllFiltered>({
@@ -37,10 +41,14 @@ const Client: React.FC = () => {
       ClientService.getallClientsFiltered(userFilterInput)
         .then(res => {
           if (res.info && res.info.length !== 0) {
-            setAllClients({ data: undefined, info: res.info });
+            setAllClients({ ...allClients, info: res.info });
             return;
           }
-          setAllClients({ info: [], data: res.data.content });
+          setAllClients({
+            info: [],
+            data: res.data.content,
+            totalPages: res.data.totalPages,
+          });
         })
         .catch(error => {
           console.error('error:', error);
@@ -50,10 +58,9 @@ const Client: React.FC = () => {
       ClientService.getallClients()
         .then(res => {
           if (res.info && res.info.length !== 0) {
-            setAllClients({ data: undefined, info: res.info });
-            return;
+            setAllClients({ ...allClients, data: undefined, info: res.info });
           } else {
-            return setAllClients({ info: [], data: res.data.content });
+            setAllClients({ ...allClients, info: [], data: res.data.content });
           }
         })
         .catch(error => {
@@ -100,7 +107,7 @@ const Client: React.FC = () => {
           );
         });
     }
-  }, [newClient && newClient.length !== 0]);
+  }, [newClient]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -119,7 +126,7 @@ const Client: React.FC = () => {
     setShowEditModal(prevVal => !prevVal);
   };
 
-  const onEditRowClick = (data: { [key: string]: any }) => {
+  const handleEditSelectedRow = (data: { [key: string]: any }) => {
     setClient(data);
     handleEditModal();
   };
@@ -127,7 +134,6 @@ const Client: React.FC = () => {
   const onUpdate = (data: { [key: string]: any }) => {
     setUpdatedClient(data);
   };
-
   const handleNewModal = () => {
     setShowNewModal(prevVal => !prevVal);
   };
@@ -154,8 +160,7 @@ const Client: React.FC = () => {
         userFilterInput={userFilterInput}
         handlePageChange={handlePageChange}
         handlePageSizeChange={handlePageSizeChange}
-        onEditRowClick={onEditRowClick}
-        setDeleteRowId={() => {}} //TODO: implement delete method after BE team api update
+        handleEditSelectedRow={handleEditSelectedRow}
       />
       {showEditModal && (
         <EditTableComponent

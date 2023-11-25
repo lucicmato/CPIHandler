@@ -14,7 +14,12 @@
     "no-console": "warn",
     "react/react-in-jsx-scope": "off",
     "react/jsx-uses-react": "off",
-    "no-unused-vars": "warn"
+    "no-unused-vars": [
+      1,
+      {
+        "args": "none"
+      }
+    ]
   },
   "settings": {
     "import/resolver": {

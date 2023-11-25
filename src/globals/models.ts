@@ -37,6 +37,7 @@ export interface ClientTableModel {
         },
       ]
     | undefined;
+  totalPages: number;
   info: string[];
 }
 export interface ProductTableModel {
@@ -58,6 +59,7 @@ export interface ProductTableModel {
         },
       ]
     | undefined;
+  totalPages: number;
   info: string[];
 }
 
@@ -81,6 +83,7 @@ export interface InvoicesByUserTableModel {
         },
       ]
     | undefined;
+  totalPages: number;
   info: string[];
 }
 

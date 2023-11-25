@@ -6,15 +6,23 @@ import EditTableComponent from '../../components/table/partials/EditTableCompone
 import NewTableComponent from '../../components/table/partials/NewTableCompnent';
 
 import { ClientTableModel, InvoicesByUserTableModel } from '../../globals/models';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Button, Dropdown, FormSelect } from 'react-bootstrap';
 import { invoicesTableHeader } from '../../components/table/TableHeaders';
 
 import styles from './Invoices.module.scss';
 
 const Invoices: React.FC = () => {
-  const [allClients, setAllClients] = React.useState<ClientTableModel>({ data: undefined, info: [] });
+  const [allClients, setAllClients] = React.useState<ClientTableModel>({
+    data: undefined,
+    info: [],
+    totalPages: 0,
+  });
   const [clientId, setClientId] = React.useState<string>('');
-  const [invoices, setInvoices] = React.useState<InvoicesByUserTableModel>({ data: undefined, info: [] });
+  const [invoices, setInvoices] = React.useState<InvoicesByUserTableModel>({
+    data: undefined,
+    info: [],
+    totalPages: 0,
+  });
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [invoice, setInvoice] = React.useState<{ [key: string]: any }>({});
   const [updatedInvoice, setUpdatedInvoice] = React.useState<{ [key: string]: any }>({});
@@ -27,10 +35,9 @@ const Invoices: React.FC = () => {
     ClientService.getallClients()
       .then(res => {
         if (res.info && res.info.length !== 0) {
-          setAllClients({ data: undefined, info: res.info });
-          return;
+          setAllClients({ ...allClients, data: undefined, info: res.info });
         } else {
-          return setAllClients({ info: [], data: res.data.content });
+          setAllClients({ ...allClients, info: [], data: res.data.content });
         }
       })
       .catch(error => {
@@ -44,10 +51,9 @@ const Invoices: React.FC = () => {
       InvoicesService.getallInvoicesByClient(clientId)
         .then(res => {
           if (res.info && res.info.length !== 0) {
-            setInvoices({ data: undefined, info: res.info });
-            return;
+            setInvoices({ ...invoices, data: undefined, info: res.info });
           }
-          setInvoices({ info: [], data: res.data });
+          setInvoices({ ...invoices, info: [], data: res.data });
         })
         .catch(error => {
           console.error('error:', error);
@@ -137,7 +143,7 @@ const Invoices: React.FC = () => {
     setUpdatedInvoice(data);
   };
 
-  const onEditRowClick = (data: { [key: string]: any }) => {
+  const handleEditSelectedRow = (data: { [key: string]: any }) => {
     setInvoice(data);
     handleEditModal();
   };
@@ -149,6 +155,30 @@ const Invoices: React.FC = () => {
   const onNewItem = (data: { [key: string]: any }[]) => {
     setNewInvoice(data);
   };
+
+  const renderClientChoose = () => {
+    return (
+      <div>
+        <FormSelect
+          aria-label="Default select example"
+          onChange={e => {
+            onClientSelect(e);
+          }}
+        >
+          <option>Choose client...</option>
+          {allClients.data?.map(client => (
+            <option key={client.id} value={client.id}>
+              {client.firstName + ' ' + client.lastName}
+            </option>
+          ))}
+        </FormSelect>
+      </div>
+    );
+  };
+
+  if (clientId === '') {
+    return <div className={styles.container}>{renderClientChoose()}</div>;
+  }
 
   return (
     <div className={styles.container}>
@@ -182,7 +212,10 @@ const Invoices: React.FC = () => {
         info={invoices.info}
         // userFilterInput={() => {}} //cant have filter input - there is no method.
         setDeleteRowId={setDeleteRowId}
-        onEditRowClick={onEditRowClick}
+        handleEditSelectedRow={handleEditSelectedRow}
+        handlePageChange={function (page: number): void {
+          throw new Error('Function not implemented.');
+        }}
       />
       {showEditModal && (
         <EditTableComponent

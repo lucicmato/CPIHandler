@@ -38,13 +38,13 @@ const EditTableComponent: React.FC<EditTableComponentProps> = ({
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          {Object.keys(editedData).map((key: string, index: number) => {
+          {Object.keys(formData).map((key: string, index: number) => {
             //TODO: Check if id is hidden for this example
             // if (key === 'id') {
             //   return null;
             // }
             return (
-              <Form.Group controlId="data1" key={index}>
+              <Form.Group controlId="updateData" key={index}>
                 <Form.Label>{key}</Form.Label>
                 <Form.Control
                   type="text"

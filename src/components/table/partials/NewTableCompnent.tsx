@@ -45,7 +45,6 @@ const NewTableComponent: React.FC<EditTableComponentProps> = ({ showModal, handl
                 <Form.Control
                   type="text"
                   name={data.accessor}
-                  // value={editedData[key]}
                   onChange={e => {
                     handleChange(e);
                   }}

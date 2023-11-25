@@ -106,57 +106,6 @@ export interface ProductModel {
   errors: string[];
 }
 
-// interface StorageDTO {
-//   createdAt: string;
-//   deletedAt: string;
-//   id: string;
-//   product: string;
-//   quantity: number;
-//   reservedQuantity: string;
-// }
-
-// interface StorageLocation {
-//   createdAt: string;
-//   deletedAt: string;
-//   id: string;
-//   maxCapacity: number;
-//   name: string;
-//   updatedAt: string;
-// }
-
-// interface UserModel {
-//   address: string;
-//   contactPersonFinancialOperations: string;
-//   contactPersonOrganisationOperations: string;
-//   contactPersonOther1: string;
-//   contactPersonOther2: string;
-//   contactPersonPickup: string;
-//   country: string;
-//   createdAt: string;
-//   deletedAt: string;
-//   email: string;
-//   firebaseUid: string;
-//   firstName: string;
-//   iban: string;
-//   id: string;
-//   imagePath: string | null;
-//   invoiceEmail: string;
-//   lastAutoGenInvoice: string | null;
-//   lastGenInvoice: string;
-//   lastName: string;
-//   notes: string;
-//   oib: string;
-//   phoneNumber: string;
-//   pickupAddress: string;
-//   updatedAt: string;
-//   userStatus: UserStatus;
-//   userType: UserRole;
-//   username: string;
-//   webShopCallback: string;
-//   workEmail: string;
-//   zipCode: string;
-// }
-
 export interface ProductAllFiltered {
   clientId: string;
   name: string;
