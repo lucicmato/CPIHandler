@@ -62,7 +62,7 @@ export const invoicesTableHeader: TableHeader[] = [
   { header: 'Deleted At', accessor: 'deletedAt', required: false },
   { header: 'Designation', accessor: 'designation', required: false },
   { header: 'Id', accessor: 'id', required: false },
-  { header: 'Invoice Items ', accessor: 'invoiceItems.productName', required: false },
+  { header: 'Invoice Items ', accessor: 'invoiceItems.productName', required: false }, //This accessor needs to be collection []
   { header: 'Issue Date', accessor: 'issueDate', required: false },
   { header: 'Note', accessor: 'note', required: false },
   { header: 'Payment Date', accessor: 'paymentDate', required: false },

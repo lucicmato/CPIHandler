@@ -191,21 +191,7 @@ const Invoices: React.FC = () => {
       >
         New invoice
       </Button>
-      <div>
-        <Dropdown onSelect={onClientSelect}>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            {'Choose Client'}
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-            {allClients.data?.map(client => (
-              <Dropdown.Item key={client.firstName} eventKey={client.id} onSelect={onClientSelect}>
-                {client.firstName + ' ' + client.lastName}
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+      {renderClientChoose()}
       <TableComponent
         headers={invoicesTableHeader}
         data={invoices.data}
